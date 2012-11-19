@@ -1,5 +1,6 @@
 package edu.skynet.featureextraction.examples;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,10 +18,16 @@ public class AfibExtractor extends FeatureExtractor {
 
 		Dataset dataset = new Dataset();
 
+		Date start = new Date();
 		for (Sample<Double> r : R) {
+
+			int sampleIndex = r.sampleIndex + stream.getSampleOffset();
+
 			Instance i = new Instance();
-			i.addAttribute("sampleIndex", r.sampleIndex + stream.getSampleOffset());
+			i.addAttribute("sampleIndex", sampleIndex);
 			i.addAttribute("R", r.data);
+			// Ex: how to get real time from sample index
+			// i.addAttribute("wall-time", stream.getSampleTime(start, sampleIndex));
 			dataset.addInstance(i);
 		}
 
