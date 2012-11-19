@@ -15,6 +15,7 @@ public abstract class TextStreamParser<T> {
 
 	File file;
 	String delimeter;
+	long sampleOffset;
 
 	/**
 	 * @param path The file location that makes up the stream
@@ -53,4 +54,11 @@ public abstract class TextStreamParser<T> {
 	 */
 	protected abstract T parseLine(String line);
 
+	protected long getSampleOffset() {
+		return sampleOffset;
+	}
+
+	public void setSampleOffset(long sampleOffset) {
+		this.sampleOffset = sampleOffset;
+	}
 }

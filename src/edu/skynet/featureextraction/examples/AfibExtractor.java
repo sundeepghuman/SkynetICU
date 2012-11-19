@@ -19,6 +19,7 @@ public class AfibExtractor extends FeatureExtractor {
 
 		for (Sample<Double> r : R) {
 			Instance i = new Instance();
+			i.addAttribute("sampleIndex", r.sampleIndex + stream.getSampleOffset());
 			i.addAttribute("R", r.data);
 			dataset.addInstance(i);
 		}
@@ -57,34 +58,6 @@ public class AfibExtractor extends FeatureExtractor {
 		return R;
 
 	}
-
-	// private List<Sample<Double>> getSValues(LinkedList<Sample<Double>> R) {
-	//
-	// // S - smallest voltage between 2 R values
-	// List<Sample<Double>> S = new LinkedList<Sample<Double>>();
-	//
-	// Sample<Double> current = R.
-	//
-	// for (int x = 0; x < R.size() - 1; x++) {
-	// Point r0 = R.get(x);
-	// Point r1 = R.get(x + 1);
-	//
-	// // get smallest value between the 2 r values
-	// float min = Float.MAX_VALUE;
-	// int minTime = -1;
-	// for (int i = r0.time; i < r0.time + (int) ((1f / 4f) * (r1.time - r0.time)); i++) {
-	// float current = voltages[i];
-	// if (current < min) {
-	// min = current;
-	// minTime = i;
-	// }
-	// }
-	//
-	// S.addLast(new Point(min, minTime));
-	// }
-	//
-	// return S;
-	// }
 
 	/**
 	 * Scan across the signal looking for R values

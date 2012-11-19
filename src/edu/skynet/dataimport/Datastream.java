@@ -16,11 +16,17 @@ public class Datastream<T> {
 	int sampleRate;
 	List<T> samples;
 	List<Annotation> annotations;
+	long sampleOffset;
 
 	public Datastream(int sampleRate, TextStreamParser<T> parser, AnnotationParser annotationParser) throws FileNotFoundException {
 		this.sampleRate = sampleRate;
 		samples = parser.parse();
 		this.annotations = annotationParser.parse();
+	}
+
+	public Datastream(int sampleRate, TextStreamParser<T> parser, AnnotationParser annotationParser, long sampleOffset) throws FileNotFoundException {
+		this(sampleRate, parser, annotationParser);
+		this.sampleOffset = sampleOffset;
 	}
 
 	/**
@@ -39,5 +45,9 @@ public class Datastream<T> {
 
 	public int getLength() {
 		return samples.size();
+	}
+
+	public long getSampleOffset() {
+		return sampleOffset;
 	}
 }
