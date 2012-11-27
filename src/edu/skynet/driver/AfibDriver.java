@@ -7,7 +7,7 @@ import java.util.List;
 import edu.skynet.dataexport.ArffExporter;
 import edu.skynet.dataimport.Datastream;
 import edu.skynet.dataimport.parsers.AnnotationParser;
-import edu.skynet.dataimport.parsers.DoubleStreamParser;
+import edu.skynet.dataimport.parsers.SampleParser;
 import edu.skynet.featureextraction.examples.AfibExtractor;
 import edu.skynet.ml.Dataset;
 
@@ -19,10 +19,10 @@ public class AfibDriver {
 
 		List<Dataset> datasets = new ArrayList<Dataset>();
 
-		DoubleStreamParser dataParser = new DoubleStreamParser("test-afib-data/04043.txt", "\\s+", 1);
+		SampleParser dataParser = new SampleParser("test-afib-data/04043.txt", "\n", "\\s+", 1);
 		AnnotationParser annotationParser = new AnnotationParser("test-afib-data/04043_annotations.txt", "\\s+", 1, 6);
 
-		Datastream<Double> ecgStream = new Datastream<>(sampleRate, dataParser, annotationParser);
+		Datastream ecgStream = new Datastream(sampleRate, dataParser, annotationParser);
 		AfibExtractor extractor = new AfibExtractor();
 		extractor.setMaxSamplesPerSlice(5000);
 		extractor.setMinSamplesPerSlice(2500);

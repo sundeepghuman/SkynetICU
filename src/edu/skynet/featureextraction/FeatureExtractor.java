@@ -14,7 +14,7 @@ import edu.skynet.ml.Instance;
  * 
  * @param <T> The type of data that makes up the samples of the stream
  */
-public abstract class FeatureExtractor<T> {
+public abstract class FeatureExtractor {
 
 	// the min/max amount of samples allowed in a slice of data
 	private int minSlice;
@@ -47,12 +47,12 @@ public abstract class FeatureExtractor<T> {
 	 * @param streams The single stream of data to extract features from
 	 * @return
 	 */
-	public final Dataset extract(Datastream<T> stream) {
+	public final Dataset extract(Datastream stream) {
 
-		List<DataSlice<T>> slices = sliceData(stream);
+		List<DataSlice> slices = sliceData(stream);
 		Dataset dataset = new Dataset();
 
-		for (DataSlice<T> slice : slices) {
+		for (DataSlice slice : slices) {
 			Instance instance = extract(slice.data, stream.getSampleRate());
 			instance.addAttribute(LABEL_ATTRIBUTE_NAME, slice.label);
 			dataset.addInstance(instance);
@@ -67,9 +67,9 @@ public abstract class FeatureExtractor<T> {
 	 * @param stream
 	 * @return
 	 */
-	private List<DataSlice<T>> sliceData(Datastream<T> stream) {
+	private List<DataSlice> sliceData(Datastream stream) {
 
-		List<DataSlice<T>> slices = new ArrayList<DataSlice<T>>();
+		List<DataSlice> slices = new ArrayList<DataSlice>();
 
 		for (Annotation annotation : stream.getAnnotations()) {
 
@@ -116,7 +116,7 @@ public abstract class FeatureExtractor<T> {
 				index += samplesPerSlice;
 				end = (int) Math.floor(index);
 
-				DataSlice<T> slice = new DataSlice<T>();
+				DataSlice slice = new DataSlice();
 				slice.data = stream.getSamples(start, end);
 				slice.label = annotation.label;
 
@@ -129,7 +129,7 @@ public abstract class FeatureExtractor<T> {
 		return slices;
 	}
 
-	public abstract Instance extract(T[] data, int sampleRate);
+	public abstract Instance extract(Double[] data, int sampleRate);
 
 	/**
 	 * Find the largest sample in the specified range of samples
@@ -139,12 +139,12 @@ public abstract class FeatureExtractor<T> {
 	 * @param last The end index of the stream
 	 * @return
 	 */
-	protected static <S extends Comparable<? super S>> int findLocalMax(S[] stream, int first, int last) {
+	protected static int findLocalMax(Double[] stream, int first, int last) {
 
 		int maxIndex = -1;
-		S max = null;
+		Double max = null;
 		for (int x = first; x < last; x++) {
-			S current = stream[x];
+			Double current = stream[x];
 			if (maxIndex == -1 || current.compareTo(max) > 0) {
 				max = current;
 				maxIndex = x;
@@ -162,12 +162,12 @@ public abstract class FeatureExtractor<T> {
 	 * @param last The end index of the stream
 	 * @return
 	 */
-	protected static <S extends Comparable<? super S>> int findLocalMin(S[] stream, int first, int last) {
+	protected static int findLocalMin(Double[] stream, int first, int last) {
 
 		int minIndex = -1;
-		S min = null;
+		Double min = null;
 		for (int x = first; x < last; x++) {
-			S current = stream[x];
+			Double current = stream[x];
 			if (minIndex == -1 || current.compareTo(min) < 0) {
 				min = current;
 				minIndex = x;
@@ -186,12 +186,12 @@ public abstract class FeatureExtractor<T> {
 	 * @param thresold The minimum allowed value to be considered a max value
 	 * @return
 	 */
-	protected static <S extends Comparable<? super S>> int findLocalMaxAboveThreshold(S[] stream, int first, int last, S threshold) {
+	protected static int findLocalMaxAboveThreshold(Double[] stream, int first, int last, Double threshold) {
 
 		int maxIndex = -1;
-		S max = null;
+		Double max = null;
 		for (int x = first; x < last; x++) {
-			S current = stream[x];
+			Double current = stream[x];
 			if (maxIndex == -1 || (current.compareTo(max) > 0 && current.compareTo(threshold) > 0)) {
 				max = current;
 				maxIndex = x;
@@ -210,15 +210,15 @@ public abstract class FeatureExtractor<T> {
 	 * @param threshold The minimum value to be considered a max
 	 * @return
 	 */
-	protected static <S extends Comparable<? super S>> int findPeakMax(S[] stream, int start, int sampleOffset, S threshold) {
+	protected static int findPeakMax(Double[] stream, int start, int sampleOffset, Double threshold) {
 
 		int maxIndex = -1;
-		S max = null;
+		Double max = null;
 		boolean inPeak = false;
 
 		int i = start;
 		while (i >= 0 && i < stream.length) {
-			S current = stream[i];
+			Double current = stream[i];
 
 			if (current.compareTo(threshold) > 0) {
 				inPeak = true; // we just entered the peak that crosses the threshold
@@ -242,7 +242,7 @@ public abstract class FeatureExtractor<T> {
 	 * @param samples The samples to find the rate of occurrence
 	 * @return
 	 */
-	protected static <S> double calculateAverageRatePerMinute(int sampleRate, List<Sample<S>> samples) {
+	protected static double calculateAverageRatePerMinute(int sampleRate, List<Sample> samples) {
 
 		if (samples == null || samples.size() == 0) {
 			return 0;
@@ -252,7 +252,7 @@ public abstract class FeatureExtractor<T> {
 		int firstIndex = Integer.MAX_VALUE;
 		int lastIndex = -1;
 
-		for (Sample<S> s : samples) {
+		for (Sample s : samples) {
 			if (s.sampleIndex > lastIndex) {
 				lastIndex = s.sampleIndex;
 			}
@@ -277,10 +277,10 @@ public abstract class FeatureExtractor<T> {
 	 * @param samples Sample set to calculate on
 	 * @return
 	 */
-	protected static double calculateAverageSampleValue(List<Sample<Double>> samples) {
+	protected static double calculateAverageSampleValue(List<Sample> samples) {
 		double sum = 0;
 
-		for (Sample<Double> s : samples) {
+		for (Sample s : samples) {
 			sum += s.data;
 		}
 
@@ -293,11 +293,11 @@ public abstract class FeatureExtractor<T> {
 	 * @param samples Sample set to calculate on
 	 * @return
 	 */
-	protected static double calculateStandardDeviation(List<Sample<Double>> samples) {
+	protected static double calculateStandardDeviation(List<Sample> samples) {
 		double mean = calculateAverageSampleValue(samples);
 		double sum = 0;
 
-		for (Sample<Double> s : samples) {
+		for (Sample s : samples) {
 			sum += Math.pow(s.data - mean, 2);
 		}
 

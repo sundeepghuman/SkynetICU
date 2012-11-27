@@ -7,12 +7,12 @@ import edu.skynet.dataimport.Sample;
 import edu.skynet.featureextraction.FeatureExtractor;
 import edu.skynet.ml.Instance;
 
-public class AfibExtractor extends FeatureExtractor<Double> {
+public class AfibExtractor extends FeatureExtractor {
 
 	@Override
 	public Instance extract(Double[] data, int sampleRate) {
 
-		List<Sample<Double>> R = getRValues(data, sampleRate);
+		List<Sample> R = getRValues(data, sampleRate);
 
 		Instance instance = new Instance();
 		instance.addAttribute("r-avg", calculateAverageSampleValue(R));
@@ -23,25 +23,25 @@ public class AfibExtractor extends FeatureExtractor<Double> {
 
 	}
 
-	private List<Sample<Double>> getRValues(Double[] stream, int sampleRate) {
+	private List<Sample> getRValues(Double[] stream, int sampleRate) {
 
-		LinkedList<Sample<Double>> R = new LinkedList<Sample<Double>>();
+		LinkedList<Sample> R = new LinkedList<Sample>();
 
 		// find the single highest point in the first 2 sec
 		// this point must be a R value
 		int maxVoltageIndex = findLocalMax(stream, 0, 2 * sampleRate);
 		Double maxVoltage = stream[maxVoltageIndex];
-		R.add(new Sample<Double>(maxVoltage, maxVoltageIndex));
+		R.add(new Sample(maxVoltage, maxVoltageIndex));
 
 		int minOffset = (int) (sampleRate / 4d);
 
 		// find all R values from here back to the beginning of the signal
-		for (Sample<Double> r : scanRValues(stream, maxVoltage, -minOffset, maxVoltageIndex - minOffset, -1)) {
+		for (Sample r : scanRValues(stream, maxVoltage, -minOffset, maxVoltageIndex - minOffset, -1)) {
 			R.addFirst(r);
 		}
 
 		// now find all the R valuse from the inital R to the end of the signal
-		for (Sample<Double> r : scanRValues(stream, maxVoltage, minOffset, maxVoltageIndex + minOffset, 1)) {
+		for (Sample r : scanRValues(stream, maxVoltage, minOffset, maxVoltageIndex + minOffset, 1)) {
 			R.addLast(r);
 		}
 
@@ -58,9 +58,9 @@ public class AfibExtractor extends FeatureExtractor<Double> {
 	 * @param signalStep How fast to move along the signal each step
 	 * @return
 	 */
-	private LinkedList<Sample<Double>> scanRValues(Double[] stream, Double initalRVoltage, int minROffset, int startIndex, int signalStep) {
+	private LinkedList<Sample> scanRValues(Double[] stream, Double initalRVoltage, int minROffset, int startIndex, int signalStep) {
 
-		LinkedList<Sample<Double>> R = new LinkedList<Sample<Double>>();
+		LinkedList<Sample> R = new LinkedList<Sample>();
 		final Double MAX_R_CHANGE = 0.8; // adjacent peaks must be within 20% of each other
 
 		int currentIndex = startIndex;
@@ -72,7 +72,7 @@ public class AfibExtractor extends FeatureExtractor<Double> {
 			if (nextPeak == -1) {
 				break;
 			}
-			R.add(new Sample<Double>(stream[nextPeak], nextPeak));
+			R.add(new Sample(stream[nextPeak], nextPeak));
 			currentIndex = nextPeak + minROffset;
 			RVoltage = stream[nextPeak];
 

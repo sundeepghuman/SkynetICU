@@ -7,27 +7,27 @@ import java.util.Date;
 import java.util.List;
 
 import edu.skynet.dataimport.parsers.AnnotationParser;
-import edu.skynet.dataimport.parsers.TextStreamParser;
+import edu.skynet.dataimport.parsers.SampleParser;
 
 /**
  * A generic stream of data imported from file
  * 
  * @param <T> The type of data that makes up the samples of the stream
  */
-public class Datastream<T> {
+public class Datastream {
 
 	private int sampleRate;
-	private List<T> samples;
+	private List<Double> samples;
 	private List<Annotation> annotations;
 	private int sampleOffset;
 
-	public Datastream(int sampleRate, TextStreamParser<T> parser, AnnotationParser annotationParser) throws FileNotFoundException {
+	public Datastream(int sampleRate, SampleParser parser, AnnotationParser annotationParser) throws FileNotFoundException {
 		this.sampleRate = sampleRate;
 		samples = parser.parse();
 		this.annotations = annotationParser.parse(samples.size());
 	}
 
-	public Datastream(int sampleRate, TextStreamParser<T> parser, AnnotationParser annotationParser, int sampleOffset) throws FileNotFoundException {
+	public Datastream(int sampleRate, SampleParser parser, AnnotationParser annotationParser, int sampleOffset) throws FileNotFoundException {
 		this(sampleRate, parser, annotationParser);
 		this.sampleOffset = sampleOffset;
 	}
@@ -54,7 +54,7 @@ public class Datastream<T> {
 	 * @param sampleIndex The desired sample index
 	 * @return
 	 */
-	public T getSample(int sampleIndex) {
+	public Double getSample(int sampleIndex) {
 		return samples.get(sampleIndex);
 	}
 
@@ -63,17 +63,15 @@ public class Datastream<T> {
 	 * 
 	 * @return
 	 */
-	public T[] getSamples(int startIndex, int endIndex) {
+	public Double[] getSamples(int startIndex, int endIndex) {
 		int length = endIndex - startIndex + 1;
-		List<T> data = new ArrayList<T>(length);
+		List<Double> data = new ArrayList<Double>(length);
 
 		for (int x = startIndex; x <= endIndex; x++) {
 			data.add(samples.get(x));
 		}
 
-		@SuppressWarnings("unchecked")
-		// TODO: fix this by removing all generics or changing arrays to lists
-		T[] dataArray = (T[]) new Double[length];
+		Double[] dataArray = new Double[length];
 		return data.toArray(dataArray);
 	}
 

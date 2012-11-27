@@ -5,12 +5,12 @@ package edu.skynet.dataimport;
  * 
  * @param <T> The type of data the sample measures
  */
-public class Sample<T> {
+public class Sample {
 
-	public T data;
+	public Double data;
 	public int sampleIndex;
 
-	public Sample(T data, int sampleIndex) {
+	public Sample(Double data, int sampleIndex) {
 		this.data = data;
 		this.sampleIndex = sampleIndex;
 	}

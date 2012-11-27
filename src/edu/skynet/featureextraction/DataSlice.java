@@ -1,8 +1,8 @@
 package edu.skynet.featureextraction;
 
-public class DataSlice<T> {
+public class DataSlice {
 
-	public T[] data;
+	public Double[] data;
 	public String label;
 
 }

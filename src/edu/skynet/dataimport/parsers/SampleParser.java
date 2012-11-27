@@ -9,22 +9,25 @@ import java.util.Scanner;
 /**
  * A generic data stream parser
  * 
- * @param <T> The type of data that makes up the samples of the stream
  */
-public abstract class TextStreamParser<T> {
+public class SampleParser {
 
 	File file;
 	String sampleDelimeter;
+	String columnDelimeter;
 	long sampleOffset;
+	int dataColumnIndex;
 
 	/**
 	 * @param path The file location that makes up the stream
 	 * @param delimeter The delimeter that separates samples
 	 * @throws FileNotFoundException
 	 */
-	public TextStreamParser(String path, String sampleDelimeter) throws FileNotFoundException {
+	public SampleParser(String path, String sampleDelimeter, String columnDelimeter, int dataColumnIndex) throws FileNotFoundException {
 		this.file = new File(path);
 		this.sampleDelimeter = sampleDelimeter;
+		this.columnDelimeter = columnDelimeter;
+		this.dataColumnIndex = dataColumnIndex;
 	}
 
 	/**
@@ -33,9 +36,9 @@ public abstract class TextStreamParser<T> {
 	 * @return
 	 * @throws FileNotFoundException
 	 */
-	public List<T> parse() throws FileNotFoundException {
+	public List<Double> parse() throws FileNotFoundException {
 
-		List<T> samples = new ArrayList<T>();
+		List<Double> samples = new ArrayList<Double>();
 
 		Scanner scanner = new Scanner(file).useDelimiter(sampleDelimeter);
 		while (scanner.hasNext()) {
@@ -52,7 +55,10 @@ public abstract class TextStreamParser<T> {
 	 * @param line The line of text that makes up 1 sample
 	 * @return
 	 */
-	protected abstract T parseLine(String line);
+	protected Double parseLine(String line) {
+		String[] parts = line.split(columnDelimeter);
+		return Double.parseDouble(parts[dataColumnIndex]);
+	}
 
 	protected long getSampleOffset() {
 		return sampleOffset;
