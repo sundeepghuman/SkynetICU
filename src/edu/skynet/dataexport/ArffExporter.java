@@ -4,8 +4,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 
+import edu.skynet.featureextraction.FeatureExtractor;
 import edu.skynet.ml.Dataset;
 import edu.skynet.ml.Instance;
 
@@ -30,7 +32,7 @@ public class ArffExporter {
 			sb.append(attribute);
 			sb.append(" ");
 			sb.append(getDataTypeName(dataSets.get(0), attribute));
-			sb.append("\n ");
+			sb.append("\n");
 		}
 		sb.append("\n\n@data\n");
 
@@ -52,6 +54,24 @@ public class ArffExporter {
 	}
 
 	private String getDataTypeName(Dataset data, String attributeName) {
+
+		// get the annotation values if this is the label attribute
+		if (attributeName == FeatureExtractor.LABEL_ATTRIBUTE_NAME) {
+			HashSet<String> annotationSet = new HashSet<String>();
+			for (Instance i : data.getInstances()) {
+				annotationSet.add(i.getValue(FeatureExtractor.LABEL_ATTRIBUTE_NAME).toString());
+			}
+			StringBuilder annotations = new StringBuilder();
+			annotations.append("{");
+			for (String annotation : annotationSet) {
+				annotations.append(annotation);
+				annotations.append(",");
+			}
+			annotations.append("}");
+
+			return annotations.toString();
+		}
+
 		Object value = data.getInstances().get(0).getValue(attributeName);
 		try {
 			Float.parseFloat(value.toString());

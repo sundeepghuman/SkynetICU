@@ -1,5 +1,10 @@
 package edu.skynet.dataimport;
 
+/**
+ * A single sample of the time-based data
+ * 
+ * @param <T> The type of data the sample measures
+ */
 public class Sample<T> {
 
 	public T data;

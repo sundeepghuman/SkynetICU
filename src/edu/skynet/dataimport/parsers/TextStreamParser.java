@@ -14,7 +14,7 @@ import java.util.Scanner;
 public abstract class TextStreamParser<T> {
 
 	File file;
-	String delimeter;
+	String sampleDelimeter;
 	long sampleOffset;
 
 	/**
@@ -22,9 +22,9 @@ public abstract class TextStreamParser<T> {
 	 * @param delimeter The delimeter that separates samples
 	 * @throws FileNotFoundException
 	 */
-	public TextStreamParser(String path, String delimeter) throws FileNotFoundException {
+	public TextStreamParser(String path, String sampleDelimeter) throws FileNotFoundException {
 		this.file = new File(path);
-		this.delimeter = delimeter;
+		this.sampleDelimeter = sampleDelimeter;
 	}
 
 	/**
@@ -37,7 +37,7 @@ public abstract class TextStreamParser<T> {
 
 		List<T> samples = new ArrayList<T>();
 
-		Scanner scanner = new Scanner(file).useDelimiter(delimeter);
+		Scanner scanner = new Scanner(file).useDelimiter(sampleDelimeter);
 		while (scanner.hasNext()) {
 
 			String line = scanner.nextLine();
