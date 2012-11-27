@@ -4,5 +4,6 @@ public class DataSlice {
 
 	public Double[] data;
 	public String label;
+	public int startIndex;
 
 }

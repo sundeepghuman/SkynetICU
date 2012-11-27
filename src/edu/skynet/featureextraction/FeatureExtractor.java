@@ -54,6 +54,7 @@ public abstract class FeatureExtractor {
 
 		for (DataSlice slice : slices) {
 			Instance instance = extract(slice.data, stream.getSampleRate());
+			instance.addAttribute("time", slice.startIndex);
 			instance.addAttribute(LABEL_ATTRIBUTE_NAME, slice.label);
 			dataset.addInstance(instance);
 		}
@@ -119,6 +120,7 @@ public abstract class FeatureExtractor {
 				DataSlice slice = new DataSlice();
 				slice.data = stream.getSamples(start, end);
 				slice.label = annotation.label;
+				slice.startIndex = start;
 
 				slices.add(slice);
 
