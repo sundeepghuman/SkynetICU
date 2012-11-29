@@ -290,6 +290,22 @@ public abstract class FeatureExtractor {
 	}
 
 	/**
+	 * Calculate the mean value of the sample data
+	 * 
+	 * @param samples Sample values to calculate on
+	 * @return
+	 */
+	protected static double calculateAverageSampleValue(Double[] samples) {
+		double sum = 0;
+
+		for (double sample : samples) {
+			sum += sample;
+		}
+
+		return sum / samples.length;
+	}
+
+	/**
 	 * Calculate the population standard deviation of the sample data
 	 * 
 	 * @param samples Sample set to calculate on
@@ -304,6 +320,24 @@ public abstract class FeatureExtractor {
 		}
 
 		return Math.sqrt(sum / samples.size());
+
+	}
+
+	/**
+	 * Calculate the population standard deviation of the sample data
+	 * 
+	 * @param samples Sample set to calculate on
+	 * @return
+	 */
+	protected static double calculateStandardDeviation(Double[] samples) {
+		double mean = calculateAverageSampleValue(samples);
+		double sum = 0;
+
+		for (double sample : samples) {
+			sum += Math.pow(sample - mean, 2);
+		}
+
+		return Math.sqrt(sum / samples.length);
 
 	}
 }
