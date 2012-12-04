@@ -1,23 +1,29 @@
 package edu.skynet.hadoop;
 
+import java.io.DataInput;
+import java.io.DataOutput;
 import java.io.IOException;
 
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.InputSplit;
 
-public class ExtractInputSplit extends InputSplit {
+public class ExtractInputSplit extends InputSplit implements Writable {
 
-	private String rawData;
-	private String filename;
+	private Path path;
 
-	public ExtractInputSplit(String rawData, String filename) {
-		super();
-		this.rawData = rawData;
-		this.filename = filename;
+	public ExtractInputSplit() {
+
+	}
+
+	public ExtractInputSplit(Path path) {
+		this.path = path;
 	}
 
 	@Override
 	public long getLength() throws IOException, InterruptedException {
-		return rawData.length() * Character.SIZE;
+		return 100;
 	}
 
 	@Override
@@ -26,12 +32,22 @@ public class ExtractInputSplit extends InputSplit {
 		return new String[] {};
 	}
 
-	public String getRawData() {
-		return rawData;
+	public void setPath(Path path) {
+		this.path = path;
 	}
 
-	public String getFilename() {
-		return filename;
+	public Path getPath() {
+		return path;
+	}
+
+	@Override
+	public void readFields(DataInput in) throws IOException {
+		path = new Path(Text.readString(in));
+	}
+
+	@Override
+	public void write(DataOutput out) throws IOException {
+		Text.writeString(out, path.toString());
 	}
 
 }

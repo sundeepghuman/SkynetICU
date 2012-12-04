@@ -1,20 +1,23 @@
 package edu.skynet.hadoop;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 
-public class ExtractRecordReader extends RecordReader<LongWritable, Text> {
+public class ExtractRecordReader extends RecordReader<PathWritable, Text> {
 
-	private String data;
-	private boolean isRead;
+	ExtractInputSplit split;
+	boolean isRead;
 
 	public ExtractRecordReader(ExtractInputSplit split) {
-		data = split.getRawData();
+		this.split = split;
 		isRead = false;
 	}
 
@@ -24,14 +27,28 @@ public class ExtractRecordReader extends RecordReader<LongWritable, Text> {
 	}
 
 	@Override
-	public LongWritable getCurrentKey() throws IOException, InterruptedException {
-		return new LongWritable(0);
+	public PathWritable getCurrentKey() throws IOException, InterruptedException {
+		return new PathWritable(split.getPath().getName());
 	}
 
 	@Override
 	public Text getCurrentValue() throws IOException, InterruptedException {
 		isRead = true;
-		return new Text(data);
+
+		Configuration conf = new Configuration();
+		FileSystem fs = FileSystem.get(conf);
+
+		FSDataInputStream stream = fs.open(split.getPath());
+
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+		byte[] buffer = new byte[1000];
+
+		while ((stream.read(buffer)) > 0) {
+			outputStream.write(buffer);
+		}
+
+		return new Text(new String(outputStream.toByteArray()));
 	}
 
 	@Override
@@ -46,7 +63,6 @@ public class ExtractRecordReader extends RecordReader<LongWritable, Text> {
 	@Override
 	public boolean nextKeyValue() throws IOException, InterruptedException {
 		return !isRead;
-		// return false;
 	}
 
 }

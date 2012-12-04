@@ -3,6 +3,7 @@ package edu.skynet.hadoop;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
@@ -15,6 +16,11 @@ public class MapRedDriver extends Configured implements Tool {
 		Job job = new Job();
 
 		job.setJarByClass(ExtractJob.ExtractorReducer.class);
+
+		job.setInputFormatClass(SplitFileInput.class);
+
+		job.setMapOutputKeyClass(PathWritable.class);
+		job.setMapOutputValueClass(Text.class);
 
 		job.setMapperClass(ExtractJob.ExtractorMapper.class);
 		job.setReducerClass(ExtractJob.ExtractorReducer.class);
