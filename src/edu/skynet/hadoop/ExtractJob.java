@@ -18,10 +18,13 @@ public class ExtractJob {
 		protected void map(PathWritable key, TimeSeriesData value, Context context) throws IOException, InterruptedException {
 			// String data = value.toString();
 			//
-			// final int sampleRate = 250;
-			// final String extractorName = "AfibExtractor";
-			// final int minSamplesPerSlice = 2500;
-			// final int maxSamplesPerSlice = 5000;
+
+			// Configuration conf = context.getConfiguration();
+			// final int sampleRate = Integer.parseInt(conf.get("sampleRate"));
+			// final String extractorName = conf.get("extractor.classNmae");
+			// final int minSlice = Integer.parseInt(conf.get("minSlice"));
+			// final int maxSLice = Integer.parseInt(conf.get("maxSlice"));
+
 			//
 			// // instantiate user's feature extractor
 			// FeatureExtractor extractor = (FeatureExtractor) Class.forName(extractorName).newInstance();

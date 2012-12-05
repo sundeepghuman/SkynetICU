@@ -18,9 +18,12 @@ import edu.skynet.hadoop.writables.PathWritable;
 public class MapRedDriver extends Configured implements Tool {
 	public int run(String[] args) throws Exception {
 
-		final String jobName = "extractedData";
+		Job job = new Job(getConf());
+		Configuration conf = getConf();
 
-		Job job = new Job();
+		conf.set("inputDirectory", args[0]);
+		conf.set("extractor.className", args[1]);
+		conf.set("sampleRate", args[2]);
 
 		job.setJarByClass(ExtractJob.ExtractorReducer.class);
 
@@ -32,13 +35,10 @@ public class MapRedDriver extends Configured implements Tool {
 		job.setMapperClass(ExtractJob.ExtractorMapper.class);
 		job.setReducerClass(ExtractJob.ExtractorReducer.class);
 
-		// set job name to name output folder that contains extracted data
-		job.getConfiguration().set("job.name", jobName);
-
 		MultipleOutputs.addNamedOutput(job, "extract", ExtractOutputFormat.class, PathWritable.class, Text.class);
 
-		FileInputFormat.setInputPaths(job, new Path(args[0]));
-		FileOutputFormat.setOutputPath(job, new Path(args[1]));
+		FileInputFormat.setInputPaths(job, new Path(conf.get("inputDirectory")));
+		FileOutputFormat.setOutputPath(job, new Path("extractedData"));
 
 		job.waitForCompletion(true);
 
@@ -46,7 +46,10 @@ public class MapRedDriver extends Configured implements Tool {
 	}
 
 	public static void main(String[] args) throws Exception {
-		int res = ToolRunner.run(new Configuration(), new MapRedDriver(), args);
+
+		Configuration conf = new Configuration();
+
+		int res = ToolRunner.run(conf, new MapRedDriver(), args);
 		System.exit(res);
 	}
 }

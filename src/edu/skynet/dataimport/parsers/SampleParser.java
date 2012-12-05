@@ -1,6 +1,5 @@
 package edu.skynet.dataimport.parsers;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.Scanner;
  */
 public class SampleParser {
 
-	File file;
+	String data;
 	String sampleDelimeter;
 	String columnDelimeter;
 	long sampleOffset;
@@ -23,8 +22,8 @@ public class SampleParser {
 	 * @param delimeter The delimeter that separates samples
 	 * @throws FileNotFoundException
 	 */
-	public SampleParser(String path, String sampleDelimeter, String columnDelimeter, int dataColumnIndex) throws FileNotFoundException {
-		this.file = new File(path);
+	public SampleParser(String data, String sampleDelimeter, String columnDelimeter, int dataColumnIndex) throws FileNotFoundException {
+		this.data = data;
 		this.sampleDelimeter = sampleDelimeter;
 		this.columnDelimeter = columnDelimeter;
 		this.dataColumnIndex = dataColumnIndex;
@@ -40,7 +39,7 @@ public class SampleParser {
 
 		List<Double> samples = new ArrayList<Double>();
 
-		Scanner scanner = new Scanner(file).useDelimiter(sampleDelimeter);
+		Scanner scanner = new Scanner(data).useDelimiter(sampleDelimeter);
 		while (scanner.hasNext()) {
 
 			String line = scanner.nextLine();
