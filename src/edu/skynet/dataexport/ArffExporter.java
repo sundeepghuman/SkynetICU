@@ -1,6 +1,5 @@
 package edu.skynet.dataexport;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 
@@ -8,14 +7,13 @@ import edu.skynet.featureextraction.FeatureExtractor;
 import edu.skynet.ml.Dataset;
 import edu.skynet.ml.Instance;
 
-public class ArffExporter {
+public class ArffExporter implements DataExporter {
 
-	public String export(String relationName, List<Dataset> dataSets) throws IOException {
+	public String export(List<Dataset> dataSets) {
 
 		StringBuffer sb = new StringBuffer();
 
-		sb.append("@relation ");
-		sb.append(relationName);
+		sb.append("@relation relationName");
 		sb.append("\n\n");
 
 		for (String attribute : dataSets.get(0).getAttributes()) {

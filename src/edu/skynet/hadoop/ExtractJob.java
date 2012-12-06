@@ -13,6 +13,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.output.MultipleOutputs;
 
 import edu.skynet.dataexport.ArffExporter;
+import edu.skynet.dataexport.DataExporter;
 import edu.skynet.dataimport.Datastream;
 import edu.skynet.dataimport.parsers.AnnotationParser;
 import edu.skynet.dataimport.parsers.SampleParser;
@@ -36,16 +37,24 @@ public class ExtractJob {
 			final String extractorName = conf.get("extractor.className");
 			final String sampleParserName = conf.get("sampleParser.className");
 			final String annotationParserName = conf.get("annotationParser.className");
-			final int minSlice = Integer.parseInt(conf.get("minSlice"));
-			final int maxSlice = Integer.parseInt(conf.get("maxSlice"));
 
 			FeatureExtractor extractor = (FeatureExtractor) instantiateClass(extractorName);
 			SampleParser sampleParser = (SampleParser) instantiateClass(sampleParserName, samples);
 			AnnotationParser annotationParser = (AnnotationParser) instantiateClass(annotationParserName, annotations);
+			DataExporter exporter = null;
+
+			// try to get optional data exporter
+			if (conf.get("exporter.class") != null) {
+				exporter = (DataExporter) instantiateClass(conf.get("exporter.class"));
+			} else {
+				exporter = new ArffExporter();
+			}
 
 			// pass in slicing params
-			extractor.setMaxSamplesPerSlice(maxSlice);
-			extractor.setMinSamplesPerSlice(minSlice);
+			if (conf.get("maxSlice") != null)
+				extractor.setMaxSamplesPerSlice(Integer.parseInt(conf.get("maxSlice")));
+			if (conf.get("minSlice") != null)
+				extractor.setMinSamplesPerSlice(Integer.parseInt(conf.get("minSlice")));
 
 			Datastream ecgStream = new Datastream(sampleRate, sampleParser, annotationParser);
 
@@ -53,8 +62,7 @@ public class ExtractJob {
 			List<Dataset> datasets = new ArrayList<Dataset>();
 			datasets.add(extractor.extract(ecgStream));
 
-			ArffExporter exporter = new ArffExporter();
-			String exportedData = exporter.export("relation-name", datasets);
+			String exportedData = exporter.export(datasets);
 
 			context.write(key, new Text(exportedData));
 		}
