@@ -1,6 +1,5 @@
 package edu.skynet.dataimport.parsers;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +11,7 @@ public class AnnotationParser {
 
 	private int startSampleIndexColumn;
 	private int dataColumn;
-	private File file;
+	private String data;
 	private String delimeter;
 
 	/**
@@ -23,8 +22,8 @@ public class AnnotationParser {
 	 * @param dataColumn The column index of the annotation's label
 	 * @throws FileNotFoundException
 	 */
-	public AnnotationParser(String path, String delimeter, int startSampleIndexColumn, int dataColumn) throws FileNotFoundException {
-		this.file = new File(path);
+	public AnnotationParser(String data, String delimeter, int startSampleIndexColumn, int dataColumn) throws FileNotFoundException {
+		this.data = data;
 		this.delimeter = delimeter;
 		this.startSampleIndexColumn = startSampleIndexColumn;
 		this.dataColumn = dataColumn;
@@ -41,7 +40,7 @@ public class AnnotationParser {
 
 		List<Annotation> samples = new ArrayList<Annotation>();
 
-		Scanner scanner = new Scanner(file);
+		Scanner scanner = new Scanner(data);
 		while (scanner.hasNext()) {
 
 			String line = scanner.nextLine();

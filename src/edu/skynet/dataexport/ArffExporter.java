@@ -1,8 +1,5 @@
 package edu.skynet.dataexport;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
@@ -13,13 +10,7 @@ import edu.skynet.ml.Instance;
 
 public class ArffExporter {
 
-	public void export(String outputPath, String relationName, List<Dataset> dataSets) throws IOException {
-		File file = new File(outputPath);
-
-		// if file doesnt exists, then create it
-		if (!file.exists()) {
-			file.createNewFile();
-		}
+	public String export(String relationName, List<Dataset> dataSets) throws IOException {
 
 		StringBuffer sb = new StringBuffer();
 
@@ -46,10 +37,7 @@ public class ArffExporter {
 			}
 		}
 
-		FileWriter fw = new FileWriter(file.getAbsoluteFile());
-		BufferedWriter bw = new BufferedWriter(fw);
-		bw.write(sb.toString());
-		bw.close();
+		return sb.toString();
 
 	}
 

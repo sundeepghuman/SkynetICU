@@ -33,7 +33,7 @@ public class ExtractRecordWriter extends RecordWriter<PathWritable, Text> {
 
 		File inputFile = new File(writable.getPath());
 
-		String outputPath = "extractedData" + "/" + inputFile.getName().split("\\.")[0] + ".txt";
+		String outputPath = "extractedData" + "/" + inputFile.getName().split("\\.")[0] + ".arff";
 
 		Path file = new Path(outputPath);
 		FileSystem fs = file.getFileSystem(conf);

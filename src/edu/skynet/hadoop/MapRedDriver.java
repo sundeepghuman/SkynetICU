@@ -18,12 +18,17 @@ import edu.skynet.hadoop.writables.PathWritable;
 public class MapRedDriver extends Configured implements Tool {
 	public int run(String[] args) throws Exception {
 
-		Job job = new Job(getConf());
 		Configuration conf = getConf();
 
+		// put these here instead of Main() to avoid command line parsing error
+		// all setting of config file must be done before Job ctor, or else they don't show up in mapper
 		conf.set("inputDirectory", args[0]);
 		conf.set("extractor.className", args[1]);
-		conf.set("sampleRate", args[2]);
+		conf.set("sampleParser.className", args[2]);
+		conf.set("annotationParser.className", args[3]);
+		conf.setInt("sampleRate", Integer.parseInt(args[4]));
+
+		Job job = new Job(getConf());
 
 		job.setJarByClass(ExtractJob.ExtractorReducer.class);
 
