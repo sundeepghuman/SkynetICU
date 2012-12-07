@@ -8,6 +8,10 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 
+/**
+ * Writable that conains the path to a single input file
+ * 
+ */
 public class PathWritable implements Writable, WritableComparable<PathWritable> {
 
 	String path;

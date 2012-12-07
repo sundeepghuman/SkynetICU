@@ -5,6 +5,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * A set of instances with the same attributes
+ * 
+ */
 public class Dataset {
 
 	private List<Instance> data;

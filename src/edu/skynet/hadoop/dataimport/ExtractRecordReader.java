@@ -46,6 +46,7 @@ public class ExtractRecordReader extends RecordReader<PathWritable, TimeSeriesDa
 	}
 
 	private String readFile(Path path) throws IOException {
+		// read data files here, so its done on data nodes instead of name node
 		Configuration conf = new Configuration();
 		FileSystem fs = FileSystem.get(conf);
 
@@ -58,7 +59,7 @@ public class ExtractRecordReader extends RecordReader<PathWritable, TimeSeriesDa
 		while ((stream.read(buffer)) > 0) {
 			outputStream.write(buffer);
 		}
-		
+
 		stream.close();
 
 		return new String(outputStream.toByteArray());

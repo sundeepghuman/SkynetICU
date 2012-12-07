@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * A generic data stream parser
+ * Parses a given stream of samples
  * 
  */
 public class SampleParser {
@@ -14,12 +14,16 @@ public class SampleParser {
 	String data;
 	String sampleDelimeter;
 	String columnDelimeter;
+	// the offset of these samples from the beginning of a longer stream
 	long sampleOffset;
 	int dataColumnIndex;
 
 	/**
-	 * @param path The file location that makes up the stream
-	 * @param delimeter The delimeter that separates samples
+	 * @param data The actual data that will needs to be parsed
+	 * @param delimeter The delimeter that separates samples from each other
+	 * @param columnDelimeter The delimiter that separates columns in a single sample from each other
+	 * @param dataColumnIndex The index of which column of data contains the sampes to be parsed (zero-indexed)
+	 * 
 	 * @throws FileNotFoundException
 	 */
 	public SampleParser(String data, String sampleDelimeter, String columnDelimeter, int dataColumnIndex) throws FileNotFoundException {

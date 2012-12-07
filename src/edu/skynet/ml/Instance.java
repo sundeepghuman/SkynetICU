@@ -3,6 +3,10 @@ package edu.skynet.ml;
 import java.util.HashMap;
 import java.util.Set;
 
+/**
+ * Represents a single instance of data with attributes and a label
+ * 
+ */
 public class Instance {
 
 	private HashMap<String, Object> values;

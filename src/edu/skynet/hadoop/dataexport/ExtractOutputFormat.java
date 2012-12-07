@@ -9,6 +9,10 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import edu.skynet.hadoop.writables.PathWritable;
 
+/**
+ * OutputFormat that data into a file
+ * 
+ */
 public class ExtractOutputFormat extends FileOutputFormat<PathWritable, Text> {
 
 	@Override

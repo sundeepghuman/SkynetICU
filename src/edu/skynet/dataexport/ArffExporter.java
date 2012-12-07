@@ -11,11 +11,15 @@ public class ArffExporter implements DataExporter {
 
 	public String export(List<Dataset> dataSets) {
 
+		// Write text into Weka's Arff file format
+
 		StringBuffer sb = new StringBuffer();
 
+		// output name of the relation
 		sb.append("@relation relationName");
 		sb.append("\n\n");
 
+		// output attributes and their types
 		for (String attribute : dataSets.get(0).getAttributes()) {
 			sb.append("@attribute ");
 			sb.append(attribute);
@@ -25,6 +29,7 @@ public class ArffExporter implements DataExporter {
 		}
 		sb.append("\n\n@data\n");
 
+		// output the instances and all their attributes
 		for (Dataset set : dataSets) {
 			for (Instance i : set.getInstances()) {
 				for (String attribute : set.getAttributes()) {
@@ -39,9 +44,16 @@ public class ArffExporter implements DataExporter {
 
 	}
 
+	/**
+	 * Get the Weka attribute type from the Java type
+	 * 
+	 * @param data Dataset that is being examined
+	 * @param attributeName Type of the attribute in that dataset
+	 * @return
+	 */
 	private String getDataTypeName(Dataset data, String attributeName) {
 
-		// get the annotation values if this is the label attribute
+		// if the attribute is the label for the set, output a set of all the possible annotation values
 		if (attributeName == FeatureExtractor.LABEL_ATTRIBUTE_NAME) {
 			HashSet<String> annotationSet = new HashSet<String>();
 			for (Instance i : data.getInstances()) {
@@ -60,7 +72,7 @@ public class ArffExporter implements DataExporter {
 
 		Object value = data.getInstances().get(0).getValue(attributeName);
 		try {
-			Float.parseFloat(value.toString());
+			Double.parseDouble(value.toString());
 			return "numeric";
 		} catch (NumberFormatException e) {
 

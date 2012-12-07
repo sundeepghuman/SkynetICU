@@ -13,6 +13,10 @@ import org.apache.hadoop.mapreduce.TaskAttemptContext;
 
 import edu.skynet.hadoop.writables.PathWritable;
 
+/**
+ * RecordWriter that writes map-reduced data into a file per reducer
+ * 
+ */
 public class ExtractRecordWriter extends RecordWriter<PathWritable, Text> {
 
 	TaskAttemptContext context;

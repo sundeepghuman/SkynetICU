@@ -1,9 +1,8 @@
 package edu.skynet.dataimport;
 
 /**
- * A single sample of the time-based data
+ * A single sample of the time-based data that contains data in a double format
  * 
- * @param <T> The type of data the sample measures
  */
 public class Sample {
 

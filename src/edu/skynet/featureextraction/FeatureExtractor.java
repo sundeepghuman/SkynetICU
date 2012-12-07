@@ -10,9 +10,8 @@ import edu.skynet.ml.Dataset;
 import edu.skynet.ml.Instance;
 
 /**
- * Extracts features from a stream(s) of data. Ex: extracting the heartrate from an ECG stream *
+ * Extracts features from a stream of data
  * 
- * @param <T> The type of data that makes up the samples of the stream
  */
 public abstract class FeatureExtractor {
 
@@ -20,6 +19,7 @@ public abstract class FeatureExtractor {
 	private int minSlice;
 	private int maxSlice;
 
+	// The name of the attribute in an exported .Arff file for the annotation attribute
 	public final static String LABEL_ATTRIBUTE_NAME = "label";
 
 	public FeatureExtractor() {
@@ -131,6 +131,13 @@ public abstract class FeatureExtractor {
 		return slices;
 	}
 
+	/**
+	 * Process the given data and extract attributes from it
+	 * 
+	 * @param data The data to be processed
+	 * @param sampleRate The sample rate of this data in samples/second
+	 * @return
+	 */
 	public abstract Instance extract(Double[] data, int sampleRate);
 
 	/**

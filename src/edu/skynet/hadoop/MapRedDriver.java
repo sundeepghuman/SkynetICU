@@ -15,6 +15,10 @@ import edu.skynet.hadoop.dataexport.ExtractOutputFormat;
 import edu.skynet.hadoop.dataimport.ExtractInputFormat;
 import edu.skynet.hadoop.writables.PathWritable;
 
+/**
+ * Main class for skynet system
+ * 
+ */
 public class MapRedDriver extends Configured implements Tool {
 	public int run(String[] args) throws Exception {
 

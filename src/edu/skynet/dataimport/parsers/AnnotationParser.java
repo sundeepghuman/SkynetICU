@@ -7,6 +7,10 @@ import java.util.Scanner;
 
 import edu.skynet.dataimport.Annotation;
 
+/**
+ * Pares the annotations for a set of samples
+ * 
+ */
 public class AnnotationParser {
 
 	private int startSampleIndexColumn;
@@ -16,10 +20,10 @@ public class AnnotationParser {
 
 	/**
 	 * 
-	 * @param path Path to the annotation file
+	 * @param data The actual text annotation data that will be parsed
 	 * @param delimeter The delimeter between columns in a single annotation line
-	 * @param startSampleIndexColumn The column index of the annotation's start index
-	 * @param dataColumn The column index of the annotation's label
+	 * @param startSampleIndexColumn The column index of the annotation data that says which sample an annotation begins at (zero-indexed)
+	 * @param dataColumn The column index of the annotation's label (zero-indexed)
 	 * @throws FileNotFoundException
 	 */
 	public AnnotationParser(String data, String delimeter, int startSampleIndexColumn, int dataColumn) throws FileNotFoundException {

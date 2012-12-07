@@ -10,9 +10,8 @@ import edu.skynet.dataimport.parsers.AnnotationParser;
 import edu.skynet.dataimport.parsers.SampleParser;
 
 /**
- * A generic stream of data imported from file
+ * A stream of data imported from file
  * 
- * @param <T> The type of data that makes up the samples of the stream
  */
 public class Datastream {
 
@@ -21,6 +20,14 @@ public class Datastream {
 	private List<Annotation> annotations;
 	private int sampleOffset;
 
+	/**
+	 * Constructs the datastream by running the samples and annotations through their respective parsers
+	 * 
+	 * @param sampleRate The number of samples per second of this data stream
+	 * @param parser The SampleParser that will parse the samples
+	 * @param annotationParser The AnnotationParse that will parse the annotations
+	 * @throws FileNotFoundException
+	 */
 	public Datastream(int sampleRate, SampleParser parser, AnnotationParser annotationParser) throws FileNotFoundException {
 		this.sampleRate = sampleRate;
 		samples = parser.parse();

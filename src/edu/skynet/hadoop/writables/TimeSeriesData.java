@@ -8,6 +8,10 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 
+/**
+ * Writable that contains all the sample and annotation raw data
+ * 
+ */
 public class TimeSeriesData implements Writable, WritableComparable<TimeSeriesData> {
 
 	String data;

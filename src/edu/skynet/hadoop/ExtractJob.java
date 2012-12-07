@@ -62,11 +62,15 @@ public class ExtractJob {
 			List<Dataset> datasets = new ArrayList<Dataset>();
 			datasets.add(extractor.extract(ecgStream));
 
+			// export features to a string
 			String exportedData = exporter.export(datasets);
 
 			context.write(key, new Text(exportedData));
 		}
 
+		/**
+		 * Instantiate the given class with the given params
+		 */
 		private Object instantiateClass(String className, Object... params) {
 			Class<?>[] args = null;
 			Constructor<?> ctor = null;
@@ -118,6 +122,8 @@ public class ExtractJob {
 
 		@Override
 		protected void reduce(PathWritable key, Iterable<Text> data, Context context) throws IOException, InterruptedException {
+
+			// just pass the data through the reducer
 			while (data.iterator().hasNext()) {
 				Text timeData = data.iterator().next();
 				mos.write("extract", key, timeData);
