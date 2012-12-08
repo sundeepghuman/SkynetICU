@@ -1,0 +1,71 @@
+<project name="SkynetICU" default="skynet" basedir=".">
+    <description>
+        Compiles skynet framework and user code
+    </description>
+	
+	<!--relative path to framework directory -->
+	<property name="frameworkDir" value="SkynetFramework"/>
+	<!--relative path to user directory -->
+	<property name="userDir" value="AfibExtractor"/>
+	<!-- Replace with your own hadoop directory -->
+	<property name="hadoopDir" location="../libs/hadoop-1.0.4/" />
+	
+	<property name="skynetJarName" value="skynet"/>
+	<property name="userJarName" value="afib-extractor"/>
+	
+	<!-- define classpath for compiling framework-->
+	<path id="skynet-classpath">
+	  <fileset dir="${hadoopDir}">
+		<include name="hadoop-core-1.0.4.jar"/>
+	  </fileset>
+	  <fileset dir="${hadoopDir}/lib">
+		<include name="commons-logging-1.1.1.jar"/>
+	  </fileset>
+	</path>
+	
+	<!-- define classpath for compiling user code-->
+	<path id="user-classpath">
+	  <fileset dir="${frameworkDir}">
+		<include name="${skynetJarName}.jar"/>
+	  </fileset>
+	</path>
+
+	
+	
+	<target name="skynet" description="Compile framework and user code and create jars">
+	
+		<mkdir dir="${frameworkDir}/bin" />
+		<mkdir dir="${userDir}/bin" />
+
+		<!-- compile framework -->
+		<javac sourcepath="" srcdir="${frameworkDir}/src" includeantruntime="false"
+				 destdir="${frameworkDir}/bin" >
+			 <classpath refid="skynet-classpath"/>
+			<include name="**/*.java"/>			
+		</javac>
+		
+		<!-- create framework jar-->
+		<jar destfile="${frameworkDir}/${skynetJarName}.jar" update="true" basedir="${frameworkDir}/bin"/>
+		
+		
+		<!-- compile user code -->
+		<javac sourcepath="" srcdir="${userDir}/src" includeantruntime="false"
+				 destdir="${userDir}/bin" >
+			 <classpath refid="user-classpath"/>
+			<include name="**/*.java"/>			
+		</javac>
+		
+		<!-- create user code jar -->
+		<jar destfile="${userDir}/${userJarName}.jar" update="true" basedir="${userDir}/bin"/>
+
+	</target>
+	
+	<target name="clean" description="Remove build files and jars" >
+	
+		<delete dir="${frameworkDir}/bin" />
+		<delete dir="${userDir}/bin"/>
+		<delete file="${frameworkDir}/${skynetJarName}.jar"/>
+		<delete file="${userDir}/${userJarName}.jar"/>	
+	
+	</target>
+</project>
