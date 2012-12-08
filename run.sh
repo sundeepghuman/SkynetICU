@@ -26,7 +26,7 @@ hadoop dfs -rmr .
 #copy over data
 echo "----Copying files to HDFS"
 hadoop dfs -mkdir input
-hadoop dfs -copyFromLocal $frameworkDir/test-afib-data/*.* input/
+hadoop dfs -copyFromLocal afib-data/*.* input/
 
 #run jar
 echo "----Running job"
