@@ -1,4 +1,4 @@
-<project name="SkynetICU" default="skynet" basedir=".">
+<project name="SkynetICU" default="all" basedir=".">
     <description>
         Compiles skynet framework and user code
     </description>
@@ -30,6 +30,8 @@
 	  </fileset>
 	</path>
 
+	
+	<target name="all" depends="clean,skynet"/>
 	
 	
 	<target name="skynet" description="Compile framework and user code and create jars">
@@ -64,6 +66,7 @@
 	
 		<delete dir="${frameworkDir}/bin" />
 		<delete dir="${userDir}/bin"/>
+		<delete dir="job-output"/>
 		<delete file="${frameworkDir}/${skynetJarName}.jar"/>
 		<delete file="${userDir}/${userJarName}.jar"/>	
 	

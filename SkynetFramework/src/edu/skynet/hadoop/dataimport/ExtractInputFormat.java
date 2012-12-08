@@ -30,7 +30,7 @@ public class ExtractInputFormat extends FileInputFormat<PathWritable, TimeSeries
 		// generate splits
 		List<InputSplit> splits = new ArrayList<InputSplit>();
 
-		HashSet<String> dataFiles = new HashSet<String>();
+		List<String> dataFiles = new ArrayList<String>();
 		HashSet<String> annotationFiles = new HashSet<String>();
 
 		// record all files that are given to hadoop
