@@ -1,0 +1,7 @@
+----How to use the SkynetICU framework to extract data from time-series data----
+
+To create a new feature extractor, extend the FeatureExtractor class and override the extract() method. This method passes in a slice of data and the supplied sample rate of the data. After extracting the data, return an Instance containing all the attributes extracted from the data. Any type of attribute is supported since the Instance class holds attributes as Object. However, the default data exporter (ArffExporter) only supports numeric and boolean data types, but this can be extended.
+
+When the extract() method is called, it is called on multiple data nodes. In addition, only a single slice of data is processed at a single time, so extracted features can only leverage the given data. Any external libraries that are used during processing will need to be passed into the hadoop jar step via the -libjars argument in the same way that the user code jar is passed in. This is because the code has to be distributed to each data node that processes the data. Hadoop will take care of this process if the jar file is passed in with this command line argument.
+
+The FeatureExtractor base class contains a few helpful methods for arbitrary data processing. Some of the methods take in a double array, but others take in Sample lists. To use the methods that take in List<Sample>, the raw data needs to be put into a Sample object that contains the sample index of a single sample of data.

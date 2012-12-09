@@ -1,0 +1,7 @@
+----How to import data into the framework----
+
+The SkynetICU framework supports text-based files of an arbitrary format as longs as there is a fixed format across every sample. Files are split into different lines of data first by the sample delimeter. The sample delimeter separates a sample from the next sample (ex: a new line, |, -, or any other java-formatted regular expression). Next, each sample is split into "columns" by the column delimeter. After the columns have been formed, the column index is used to pull out the data at that column and treat that data as a single sample (note: the column index counts from 0 not 1). Once, the sample text has been pulled out, it is parsed into a Double and put into the data stream.
+
+In addition to parsing samples, the annotations also need to be imported since they describe and give meaning to the time-series data. Parsing annotations is very similar to parsing samples. The process and be extended in the same was as samples also. Parsing annotations requires an additional column in the data that says where a certain annotation starts. It is assumed that when another annotation starts, the previous annotation ends.
+
+Extending the SampleParser for other classes can be done by overwriting the parse() method. The parse() method is called in DataStream's constructor. Any external library can be used in parsing the data, but the external jar file needs to be passed into hadoop via -libjars command line argument. Custom parsers must return the a List<Double> that contains the parsed data in consecutive order.

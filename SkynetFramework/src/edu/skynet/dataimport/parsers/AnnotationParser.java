@@ -16,21 +16,25 @@ public class AnnotationParser {
 	private int startSampleIndexColumn;
 	private int dataColumn;
 	private String data;
-	private String delimeter;
+	private String columnDelimeter;
+	private String sampleDelimeter;
 
 	/**
 	 * 
 	 * @param data The actual text annotation data that will be parsed
-	 * @param delimeter The delimeter between columns in a single annotation line
+	 * @param sampleDelimeter The delimeter between samples
+	 * @param columnDelimeter The delimeter between columns in a single annotation line
 	 * @param startSampleIndexColumn The column index of the annotation data that says which sample an annotation begins at (zero-indexed)
-	 * @param dataColumn The column index of the annotation's label (zero-indexed)
+	 * @param dataColumnIndex The column index of the annotation's label (zero-indexed)
 	 * @throws FileNotFoundException
 	 */
-	public AnnotationParser(String data, String delimeter, int startSampleIndexColumn, int dataColumn) throws FileNotFoundException {
+	public AnnotationParser(String data, String sampleDelimeter, String columnDelimeter, int dataColumnIndex, int startSampleIndexColumn)
+			throws FileNotFoundException {
 		this.data = data;
-		this.delimeter = delimeter;
+		this.columnDelimeter = columnDelimeter;
+		this.sampleDelimeter = sampleDelimeter;
 		this.startSampleIndexColumn = startSampleIndexColumn;
-		this.dataColumn = dataColumn;
+		this.dataColumn = dataColumnIndex;
 	}
 
 	/**
@@ -44,7 +48,7 @@ public class AnnotationParser {
 
 		List<Annotation> samples = new ArrayList<Annotation>();
 
-		Scanner scanner = new Scanner(data);
+		Scanner scanner = new Scanner(data).useDelimiter(sampleDelimeter);
 		while (scanner.hasNext()) {
 
 			String line = scanner.nextLine();
@@ -67,7 +71,7 @@ public class AnnotationParser {
 
 	private Annotation parseLine(String line) {
 
-		String[] parts = line.trim().split(delimeter);
+		String[] parts = line.trim().split(columnDelimeter);
 
 		return new Annotation(Integer.parseInt(parts[startSampleIndexColumn]), parts[dataColumn]);
 	}

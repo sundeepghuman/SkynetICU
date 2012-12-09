@@ -7,6 +7,6 @@ import edu.skynet.dataimport.parsers.AnnotationParser;
 public class AfibAnnotationParser extends AnnotationParser {
 
 	public AfibAnnotationParser(String annotations) throws FileNotFoundException {
-		super(annotations, "\\s+", 1, 6);
+		super(annotations, "\n", "\\s+", 6, 1);
 	}
 }

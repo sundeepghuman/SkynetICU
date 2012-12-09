@@ -1,0 +1,5 @@
+----How to export data out of the framework----
+
+After processing data, it needs to be exported to a useable format. This framework natively supports exporting into Weka's .arff format. Any data exporter can be written and used to export data though. Currently the framework only supports exporting text-based formats, but this could be changed fairly easily in the framework code by changing the DataExporter interface to allow binary data and changing how the file is written in write() in RecordWriter.java.
+
+To use a custom data exporter (ArffExporter is default is none is provided), a class implementing DataExporter needs to be passed into the framework. The export() method needs to return a String containing all the text that is written to a file. The filename of the output file will be the same as the input sample file's name.  Using a custom exporter is done by compiling the exporter into a .jar file, passing that jar file into the hadoop jar command via the -libjars argument, and providing the fully-qualified class name to the hadoop jar command into exporter.class property. An example of this entire process is provided in the AfibExtractor example.

@@ -1,0 +1,7 @@
+----How the framework executes----
+
+A high-leve view of the code flow of the SkynetICU framework is: 1. data is imported and parsed, 2. data is processed, 3. data is exported. The actual process is more complicated since it is integrated with Hadoop and the map-reduce paradigm. 
+
+At the start of a job, the job parameters are initialized, the command line arguments are placed in the job configuration file, and then the job is handed off to Hadoop and started. How the process of Hadoop flows depends on the structure of the cluster it is running on, but for understanding the main part of the framework, the cluster is irrelevant. Each data node receives a single, entire file to process. All of the processing occurs in the Mapper. 
+
+Once the flow reaches Mapper.map(), the parser classes and exporter class are instantiated based on the given class names in the command line arguments. Next, the samples and annotations are parsed with those parsers. After that, the extract step occurs on the data, and finally the data is exported to a String. The reduce step doesn't do anything since the data is not reduced but copied to its respective files. After the job is done, the data is located on the HDFS, but it's also copied over to the local machine.

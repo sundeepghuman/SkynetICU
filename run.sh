@@ -1,12 +1,18 @@
+#Main directory containing framework code
 frameworkDir="SkynetFramework"
+#Main directory containing user code
 userDir="AfibExtractor"
+
+#Required parameters
 extractorClass="edu.skynet.featureextraction.AfibExtractor"
 sampleParserClass="edu.skynet.afib.parsers.AfibSampleParser"
 annotationParserClass="edu.skynet.afib.parsers.AfibAnnotationParser"
-exporterClass="edu.skynet.afib.export.AfibDataExporter"
 sampleRate="250"
+
+#All optional parameters
 minSlice="1000"
 maxSlice="1500"
+exporterClass="edu.skynet.afib.export.AfibDataExporter"
 
 
 #clear hdfs
